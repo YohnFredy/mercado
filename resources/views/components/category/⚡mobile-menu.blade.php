@@ -36,7 +36,7 @@ new class extends Component {
         class="fixed inset-y-0 left-0 w-[85vw] max-w-sm bg-white z-50 flex flex-col shadow-2xl">
 
         <!-- Header del Panel -->
-        <div class="flex items-center justify-between px-5 py-4 bg-primary">
+        <div class="flex items-center justify-between px-5 py-3 bg-primary">
             <div class="flex items-center gap-3">
                 <flux:icon.squares-2x2 class="text-white/80 size-6" />
                 <h2 class="text-lg font-bold text-white tracking-wide">Categorías</h2>
@@ -50,26 +50,26 @@ new class extends Component {
         <!-- Contenido Scrollable -->
         <div class="flex-1 overflow-y-auto overscroll-contain">
 
-            <nav class="py-3">
+            <nav class="py-8">
                 @foreach ($categories as $category)
-                    <div wire:key="mobile-cat-{{ $category['id'] }}" x-data="{ expanded: false }" class="border-b border-gray-100 last:border-b-0">
+                    <div wire:key="mobile-cat-{{ $category['id'] }}" x-data="{ expanded: false }" class="border-b border-gray-200 last:border-b-0">
 
                         <!-- Categoría Principal (Nivel 1) -->
                         <button x-on:click="expanded = !expanded"
-                            class="cursor-pointer w-full flex items-center justify-between px-5 py-3.5 text-left transition-all duration-200"
-                            x-bind:class="expanded ? 'bg-primary/5' : 'hover:bg-gray-50'">
+                            class="cursor-pointer w-full flex items-center justify-between px-5 py-2 text-left transition-all duration-200"
+                            x-bind:class="expanded ? 'bg-primary/10' : 'hover:bg-gray-50'">
 
                             <div class="flex items-center gap-3">
                                 <span class="w-1 h-6 rounded-full transition-colors duration-200"
-                                    x-bind:class="expanded ? 'bg-primary' : 'bg-gray-200'"></span>
+                                    x-bind:class="expanded ? 'bg-primary' : 'bg-primary/40'"></span>
                                 <span class="font-semibold text-[15px] transition-colors duration-200"
-                                    x-bind:class="expanded ? 'text-primary' : 'text-gray-800'">
+                                    x-bind:class="expanded ? 'text-primary' : 'text-gray-700'">
                                     {{ $category['name'] }}
                                 </span>
                             </div>
 
-                            <flux:icon.chevron-right class="size-4 text-gray-400 transition-transform duration-300"
-                                x-bind:class="expanded && 'rotate-90 !text-primary'" />
+                            <flux:icon.chevron-right class="size-4 text-gray-600 transition-transform duration-300"
+                                x-bind:class="expanded && 'rotate-90 text-primary!'" />
                         </button>
 
                         <!-- Subcategorías (Nivel 2) -->
@@ -80,30 +80,30 @@ new class extends Component {
 
                                         <button x-on:click="subExpanded = !subExpanded"
                                             class="cursor-pointer w-full flex items-center justify-between pl-4 pr-3 py-2.5 rounded-lg text-left transition-all duration-200 border-l-2"
-                                            x-bind:class="subExpanded ? 'border-secondary bg-secondary/5' : 'border-transparent hover:border-gray-200 hover:bg-gray-50'">
+                                            x-bind:class="subExpanded ? 'border-secondary bg-secondary/10' : 'border-transparent hover:border-gray-200 hover:bg-gray-50'">
 
                                             <span class="font-medium text-sm transition-colors duration-200"
-                                                x-bind:class="subExpanded ? 'text-gray-900' : 'text-gray-600'">
+                                                x-bind:class="subExpanded ? 'text-gray-700' : 'text-gray-800'">
                                                 {{ $subcategory['name'] }}
                                             </span>
 
                                             @if (count($subcategory['children']) > 0)
                                                 <flux:icon.chevron-right
                                                     class="size-3.5 text-gray-400 transition-transform duration-300 shrink-0 ml-2"
-                                                    x-bind:class="subExpanded && 'rotate-90 !text-secondary'" />
+                                                    x-bind:class="subExpanded && 'rotate-90 text-secondary!'" />
                                             @endif
                                         </button>
 
                                         <!-- Items (Nivel 3) -->
                                         @if (count($subcategory['children']) > 0)
                                             <div x-show="subExpanded" x-collapse x-cloak>
-                                                <ul class="pl-6 pr-2 py-1.5 space-y-0.5">
+                                                <ul class="pl-4 pr-2 py-1.5 space-y-0.5">
                                                     @foreach ($subcategory['children'] as $item)
                                                         <li wire:key="mobile-item-{{ $item['id'] }}">
-                                                            <a href="#"
-                                                                class="flex items-center gap-2 py-2 px-3 rounded-md text-sm text-gray-500 hover:text-primary hover:bg-primary/5 transition-all duration-200 group">
+                                                            <a href="{{ route('category', $item['slug']) }}"
+                                                                class="flex items-center gap-2 py-2 px-3 rounded-md text-sm text-gray-600 hover:text-primary hover:bg-primary/5 transition-all duration-200 group">
                                                                 <span
-                                                                    class="w-1.5 h-1.5 rounded-full bg-gray-300 group-hover:bg-primary transition-colors duration-200 shrink-0"></span>
+                                                                    class="w-1.5 h-1.5 rounded-full bg-gray-500 group-hover:bg-primary transition-colors duration-200 shrink-0"></span>
                                                                 {{ $item['name'] }}
                                                             </a>
                                                         </li>
@@ -118,15 +118,6 @@ new class extends Component {
                     </div>
                 @endforeach
             </nav>
-        </div>
-
-        <!-- Footer del Panel -->
-        <div class="px-5 py-3 border-t border-gray-100 bg-gray-50/80">
-            <a href="#"
-                class="flex items-center justify-center gap-2 py-2.5 rounded-xl bg-primary text-white font-semibold text-sm hover:bg-primary/90 transition-colors duration-200">
-                <flux:icon.squares-2x2 class="size-4" />
-                Ver todas las categorías
-            </a>
         </div>
     </div>
 </div>

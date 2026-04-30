@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;
 
 new #[Layout('layouts.admin')] class extends Component {
@@ -57,6 +58,8 @@ new #[Layout('layouts.admin')] class extends Component {
     }
 
     public function save() {
+        Gate::authorize($this->brandId ? 'brands:edit' : 'brands:create');
+
         $this->validate();
 
         $brand = Brand::updateOrCreate(
@@ -89,6 +92,8 @@ new #[Layout('layouts.admin')] class extends Component {
     }
 
     public function delete($id) {
+        Gate::authorize('brands:delete');
+
         $brand = Brand::findOrFail($id);
         $brand->images()->delete();
         $brand->delete();
@@ -112,7 +117,9 @@ new #[Layout('layouts.admin')] class extends Component {
                 <flux:heading size="xl">{{ __('Marcas') }}</flux:heading>
                 <flux:subheading>{{ __('Administra las marcas de la tienda.') }}</flux:subheading>
             </div>
+            @can('brands:create')
             <flux:button variant="primary" icon="plus" wire:click="openModal">{{ __('Añadir Marca') }}</flux:button>
+            @endcan
         </div>
 
         <div class="flex gap-4">
@@ -152,8 +159,12 @@ new #[Layout('layouts.admin')] class extends Component {
                         </flux:table.cell>
                         <flux:table.cell>
                             <div class="flex gap-2">
+                                @can('brands:edit')
                                 <flux:button size="sm" variant="subtle" icon="pencil" wire:click="openModal({{ $brand->id }})" />
+                                @endcan
+                                @can('brands:delete')
                                 <flux:button size="sm" variant="danger" icon="trash" wire:confirm="{{ __('¿Seguro que deseas eliminar esta marca?') }}" wire:click="delete({{ $brand->id }})" />
+                                @endcan
                             </div>
                         </flux:table.cell>
                     </flux:table.row>

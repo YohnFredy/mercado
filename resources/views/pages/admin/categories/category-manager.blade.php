@@ -6,6 +6,7 @@ use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;
 
 new #[Layout('layouts.admin')] class extends Component {
@@ -73,6 +74,8 @@ new #[Layout('layouts.admin')] class extends Component {
     }
 
     public function save() {
+        Gate::authorize($this->categoryId ? 'categories:edit' : 'categories:create');
+        
         $this->validate();
 
         // Prevent a category from being its own parent or descending from itself
@@ -112,6 +115,8 @@ new #[Layout('layouts.admin')] class extends Component {
     }
 
     public function delete($id) {
+        Gate::authorize('categories:delete');
+        
         $category = Category::findOrFail($id);
         
         // Prevent deletion if it has children
@@ -179,7 +184,9 @@ new #[Layout('layouts.admin')] class extends Component {
                 <flux:heading size="xl">{{ __('Categorías') }}</flux:heading>
                 <flux:subheading>{{ __('Administra las categorías de la tienda y su jerarquía.') }}</flux:subheading>
             </div>
+            @can('categories:create')
             <flux:button variant="primary" icon="plus" wire:click="openModal">{{ __('Añadir Categoría') }}</flux:button>
+            @endcan
         </div>
 
         @error('delete')
@@ -233,8 +240,12 @@ new #[Layout('layouts.admin')] class extends Component {
                         </flux:table.cell>
                         <flux:table.cell>
                             <div class="flex gap-2">
+                                @can('categories:edit')
                                 <flux:button size="sm" variant="subtle" icon="pencil" wire:click="openModal({{ $category->id }})" />
+                                @endcan
+                                @can('categories:delete')
                                 <flux:button size="sm" variant="danger" icon="trash" wire:confirm="{{ __('¿Seguro que deseas eliminar esta categoría?') }}" wire:click="delete({{ $category->id }})" />
+                                @endcan
                             </div>
                         </flux:table.cell>
                     </flux:table.row>

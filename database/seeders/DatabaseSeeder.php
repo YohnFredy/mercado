@@ -13,11 +13,11 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
-
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $this->call([
+            PermissionSeeder::class,
         ]);
+
+        // Disable the generic factory call since we create the user in PermissionSeeder
+        // User::factory(10)->create();
     }
 }

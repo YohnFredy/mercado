@@ -9,6 +9,7 @@ use Livewire\WithPagination;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Gate;
 use Livewire\Attributes\Layout;
 
 new #[Layout('layouts.admin')] class extends Component {
@@ -69,23 +70,23 @@ new #[Layout('layouts.admin')] class extends Component {
     }
 
     public function updatedTitle($value) {
-        if (!$this->productId) {
-            $this->slug = Str::slug($value);
-            if (empty($this->sku) && !empty($value)) {
-                $words = explode(' ', trim($value));
-                $skuParts = [];
-                foreach ($words as $word) {
-                    $cleanWord = preg_replace('/[^A-Za-z0-9]/', '', Str::ascii($word));
-                    if (strlen($cleanWord) > 0) {
-                        if (is_numeric($cleanWord)) {
-                            $skuParts[] = $cleanWord;
-                        } else {
-                            $skuParts[] = strtoupper(substr($cleanWord, 0, 3));
-                        }
+        $this->slug = Str::slug($value);
+        if (!empty($value)) {
+            $words = explode(' ', trim($value));
+            $skuParts = [];
+            foreach ($words as $word) {
+                $cleanWord = preg_replace('/[^A-Za-z0-9]/', '', Str::ascii($word));
+                if (strlen($cleanWord) > 0) {
+                    if (is_numeric($cleanWord)) {
+                        $skuParts[] = $cleanWord;
+                    } else {
+                        $skuParts[] = strtoupper(substr($cleanWord, 0, 3));
                     }
                 }
-                $this->sku = implode('-', $skuParts);
             }
+            $this->sku = implode('-', $skuParts);
+        } else {
+            $this->sku = '';
         }
     }
 
@@ -113,12 +114,13 @@ new #[Layout('layouts.admin')] class extends Component {
         $selling = (float) $this->selling_price_excl_vat;
         $discount = (float) $this->discount_percentage;
 
-        if ($cost <= 0) return 0;
-        
         $actualSelling = $selling * (1 - ($discount / 100));
+        
+        if ($actualSelling <= 0) return 0;
+        
         $profit = $actualSelling - $cost;
         
-        return round(($profit / $cost) * 100, 2);
+        return round(($profit / $actualSelling) * 100, 2);
     }
 
     public function openModal($id = null) {
@@ -175,6 +177,8 @@ new #[Layout('layouts.admin')] class extends Component {
     }
 
     public function save() {
+        Gate::authorize($this->productId ? 'products:edit' : 'products:create');
+
         $this->validate();
 
         $specsJson = [];
@@ -189,7 +193,7 @@ new #[Layout('layouts.admin')] class extends Component {
             [
                 'brand_id' => empty($this->brand_id) ? null : $this->brand_id,
                 'sku' => $this->sku,
-                'barcode' => $this->barcode,
+                'barcode' => empty($this->barcode) ? null : $this->barcode,
                 'title' => $this->title,
                 'slug' => $this->slug,
                 'description' => $this->description,
@@ -222,6 +226,8 @@ new #[Layout('layouts.admin')] class extends Component {
     }
 
     public function delete($id) {
+        Gate::authorize('products:delete');
+
         $product = Product::findOrFail($id);
         $product->categories()->detach();
         $product->images()->delete(); 
@@ -284,7 +290,9 @@ new #[Layout('layouts.admin')] class extends Component {
                 <flux:heading size="xl">{{ __('Productos') }}</flux:heading>
                 <flux:subheading>{{ __('Administra el inventario de la tienda.') }}</flux:subheading>
             </div>
+            @can('products:create')
             <flux:button variant="primary" icon="plus" wire:click="openModal">{{ __('Añadir Producto') }}</flux:button>
+            @endcan
         </div>
 
         <div class="flex gap-4">
@@ -332,8 +340,12 @@ new #[Layout('layouts.admin')] class extends Component {
                         </flux:table.cell>
                         <flux:table.cell>
                             <div class="flex gap-2">
+                                @can('products:edit')
                                 <flux:button size="sm" variant="subtle" icon="pencil" wire:click="openModal({{ $product->id }})" />
+                                @endcan
+                                @can('products:delete')
                                 <flux:button size="sm" variant="danger" icon="trash" wire:confirm="{{ __('¿Seguro que deseas eliminar este producto?') }}" wire:click="delete({{ $product->id }})" />
+                                @endcan
                             </div>
                         </flux:table.cell>
                     </flux:table.row>

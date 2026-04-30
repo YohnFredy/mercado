@@ -1,16 +1,28 @@
 {
     "agents": [
+        "gemini",
+        "claude_code",
         "codex"
     ],
     "guidelines": true,
-    "herd_mcp": true,
     "mcp": true,
     "nightwatch_mcp": false,
     "sail": false,
     "skills": [
+        "fortify-development",
+        "laravel-best-practices",
         "fluxui-development",
         "livewire-development",
         "volt-development",
         "tailwindcss-development"
-    ]
+    ],
+    "versions": {
+        "php": "8.4",
+        "livewire/livewire": "4.x",
+        "laravel/framework": "13.x",
+        "tailwindcss": "4.x",
+        "livewire/flux": "2.x",
+        "laravel/fortify": "1.x",
+        "livewire/volt": "1.x"
+    }
 }

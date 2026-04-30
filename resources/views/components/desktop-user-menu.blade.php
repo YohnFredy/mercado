@@ -20,6 +20,9 @@
                 <flux:menu.item :href="route('dashboard')" icon="squares-2x2" wire:navigate class="hover:bg-primary/5 hover:text-primary transition-colors">
                     {{ __('Panel de control') }}
                 </flux:menu.item>
+                <flux:menu.item :href="route('customer.orders')" icon="shopping-bag" wire:navigate class="hover:bg-primary/5 hover:text-primary transition-colors">
+                    {{ __('Mis Pedidos') }}
+                </flux:menu.item>
                 <flux:menu.item :href="route('profile.edit')" icon="cog" wire:navigate class="hover:bg-primary/5 hover:text-primary transition-colors">
                     {{ __('Configuración') }}
                 </flux:menu.item>

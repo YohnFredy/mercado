@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use App\Models\Category;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class CategorySeeder extends Seeder
@@ -236,9 +237,9 @@ class CategorySeeder extends Seeder
             ],
         ];
 
-        \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=0;');
+        DB::statement('SET FOREIGN_KEY_CHECKS=0;');
         Category::truncate();
-        \Illuminate\Support\Facades\DB::statement('SET FOREIGN_KEY_CHECKS=1;');
+        DB::statement('SET FOREIGN_KEY_CHECKS=1;');
 
         foreach ($categories as $topLevelName => $subcategories) {
             $topLevel = Category::firstOrCreate([
@@ -250,7 +251,7 @@ class CategorySeeder extends Seeder
             foreach ($subcategories as $subCategoryName => $items) {
                 $subCategory = Category::firstOrCreate([
                     'parent_id' => $topLevel->id,
-                    'slug' => Str::slug($topLevelName . ' ' . $subCategoryName),
+                    'slug' => Str::slug($topLevelName.' '.$subCategoryName),
                 ], [
                     'name' => $subCategoryName,
                 ]);
@@ -258,7 +259,7 @@ class CategorySeeder extends Seeder
                 foreach ($items as $itemName) {
                     Category::firstOrCreate([
                         'parent_id' => $subCategory->id,
-                        'slug' => Str::slug($topLevelName . ' ' . $subCategoryName . ' ' . $itemName),
+                        'slug' => Str::slug($topLevelName.' '.$subCategoryName.' '.$itemName),
                     ], [
                         'name' => $itemName,
                     ]);

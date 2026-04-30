@@ -46,4 +46,13 @@ Use classes like `text-gray-900`, `bg-gray-100`, `border-gray-200` accordingly.
 <div class="bg-secondary text-fondo p-4">
     <!-- Contenido -->
 </div>
-```
+## 4. Responsiveness & Tailwind v4
+- **Tailwind CSS v4:** Always use Tailwind CSS v4 features and syntax.
+- **Mobile-First Design:** Always design mobile-first. The layout must function correctly from **320px** wide without any horizontal overflow.
+- **Fluid Layouts:** Avoid fixed widths (e.g., `w-[320px]`). Use `w-full`, `max-w-*`, `flex`, and `grid` with responsive utilities.
+- **Full Responsiveness:** Ensure all components and layouts are fully responsive across all screen sizes up to ultra-wide desktops.
+
+## 5. Estética y Acabado Premium
+- **Diseño de Clase Mundial:** El diseño debe ser moderno, elegante, profesional y con apariencia premium.
+- **Responsive Total:** Totalmente responsive hasta desktop, asegurando que la experiencia sea igual de refinada en todos los dispositivos.
+- **Detalle Visual:** Utilizar sombras sutiles, bordes redondeados (según el sistema) y espaciado generoso para transmitir calidad.

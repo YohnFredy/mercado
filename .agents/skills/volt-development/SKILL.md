@@ -47,11 +47,15 @@ $double = computed(fn () => $this->count * 2);
 @@endvolt
 ```
 
-### Class-Based Components
+### Class-Based Components (Single File Components)
+
+Cuando construyas componentes basados en clases (que es el estándar que usamos), recuerda que debes heredar de la clase base de Livewire (`Livewire\Component`), **NO** de `Livewire\Volt\Component`. Esto es fundamental para evitar problemas de resolución en la vista.
 
 <!-- Volt Class-based Component -->
 ```php
-use Livewire\Volt\Component;
+<?php
+
+use Livewire\Component;
 
 new class extends Component {
     public int $count = 0;
