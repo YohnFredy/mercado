@@ -1,4 +1,4 @@
-<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+<div class="max-w-5xl mx-auto sm:px-6 lg:px-8 py-8 sm:py-12">
 
     <!-- Progress Steps -->
     <div class="flex items-center justify-center gap-2 sm:gap-4 mb-8">
@@ -71,10 +71,21 @@
                         Dirección de Envío
                     </h2>
 
+                    {{-- Aviso si no hay departamentos con cobertura --}}
+                    @if($this->departments->isEmpty())
+                    <div class="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl p-4">
+                        <flux:icon.exclamation-triangle class="size-5 text-amber-500 shrink-0 mt-0.5" />
+                        <div>
+                            <p class="text-sm font-bold text-amber-700">Sin cobertura disponible</p>
+                            <p class="text-xs text-amber-600 mt-0.5">Actualmente no tenemos entregas habilitadas en ninguna zona. Pronto estaremos disponibles en tu ciudad.</p>
+                        </div>
+                    </div>
+                    @endif
+
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
                         <flux:field>
                             <flux:label>Departamento *</flux:label>
-                            <flux:select wire:model.live="department_id" placeholder="Selecciona un departamento...">
+                            <flux:select wire:model.live="department_id" :disabled="$this->departments->isEmpty()">
                                 <flux:select.option value="">Selecciona un departamento...</flux:select.option>
                                 @foreach($this->departments as $department)
                                 <flux:select.option value="{{ $department->id }}">{{ $department->name }}</flux:select.option>
@@ -85,14 +96,27 @@
 
                         <flux:field>
                             <flux:label>Ciudad *</flux:label>
-                            <flux:select wire:model.live="city_id" placeholder="Selecciona una ciudad..." :disabled="!$department_id">
+                            <flux:select wire:model.live="city_id" :disabled="!$department_id || $this->cities->isEmpty()">
+                                @if($department_id && $this->cities->isEmpty())
+                                <flux:select.option value="">No hay ciudades con cobertura en este departamento</flux:select.option>
+                                @else
+                                <flux:select.option value="">Selecciona una ciudad...</flux:select.option>
                                 @foreach($this->cities as $city)
                                 <flux:select.option value="{{ $city->id }}">{{ $city->name }}</flux:select.option>
                                 @endforeach
+                                @endif
                             </flux:select>
                             <flux:error name="city_id" />
                         </flux:field>
                     </div>
+
+                    {{-- Aviso de ciudad sin cobertura --}}
+                    @if($department_id && $this->cities->isEmpty())
+                    <div class="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl p-4">
+                        <flux:icon.map-pin class="size-5 text-red-400 shrink-0 mt-0.5" />
+                        <p class="text-sm text-red-600">Aún no tenemos cobertura en este departamento. Estamos expandiéndonos pronto.</p>
+                    </div>
+                    @endif
 
                     <div class="mt-5">
                         <flux:field>
@@ -153,7 +177,8 @@
                     </a>
 
                     <button type="submit"
-                        class="w-full sm:w-auto bg-primary hover:bg-primary/95 text-white px-10 py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-xl shadow-primary/25 active:scale-[0.98] flex items-center justify-center gap-3 cursor-pointer">
+                        @if($this->departments->isEmpty() || ($department_id && $this->cities->isEmpty())) disabled @endif
+                        class="w-full sm:w-auto bg-primary hover:bg-primary/95 text-white px-10 py-4 rounded-2xl font-black text-sm uppercase tracking-widest transition-all shadow-xl shadow-primary/25 active:scale-[0.98] flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:pointer-events-none">
                         <flux:icon.check-circle variant="solid" class="size-5" />
                         Confirmar Pedido
                     </button>

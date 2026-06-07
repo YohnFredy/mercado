@@ -117,6 +117,7 @@ new class extends Component {
 <div
     x-data="cartNotification(@entangle('visible'))"
     x-show="show"
+    x-cloak
     x-transition:enter="transition ease-out duration-400"
     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:translate-x-8"
     x-transition:enter-end="opacity-100 translate-y-0 sm:translate-x-0"
@@ -126,7 +127,7 @@ new class extends Component {
     class="fixed bottom-24 left-4 right-4 sm:bottom-8 sm:left-auto sm:right-6 sm:w-[380px] z-[9999] pointer-events-none"
     aria-live="polite"
     aria-atomic="true">
-    <div class="pointer-events-auto bg-white rounded-3xl shadow-2xl shadow-black/15 border border-gray-100 overflow-hidden">
+    <div class="pointer-events-auto bg-white rounded-3xl shadow-xl shadow-black border border-green-400 overflow-hidden">
 
         {{-- Progress bar --}}
         <div class="h-1 bg-gray-100 relative overflow-hidden">

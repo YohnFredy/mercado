@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Order extends Model
 {
@@ -50,18 +51,12 @@ class Order extends Model
      */
     public static function generateOrderNumber(): string
     {
-        $date = now()->format('Ymd');
-        $lastOrder = static::query()
-            ->where('order_number', 'like', "ORD-{$date}-%")
-            ->orderByDesc('id')
-            ->first();
+        do {
+            // Genera un código de 8 caracteres alfanuméricos (ej: A1B2-C3D4)
+            $random = strtoupper(Str::random(8));
+            $number = substr($random, 0, 4).'-'.substr($random, 4, 4);
+        } while (static::where('order_number', $number)->exists());
 
-        $sequence = 1;
-        if ($lastOrder) {
-            $lastSequence = (int) str($lastOrder->order_number)->afterLast('-')->toString();
-            $sequence = $lastSequence + 1;
-        }
-
-        return sprintf('ORD-%s-%04d', $date, $sequence);
+        return $number;
     }
 }

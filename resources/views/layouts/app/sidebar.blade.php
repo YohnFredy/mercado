@@ -19,7 +19,7 @@
                 </flux:sidebar.item>
             </flux:sidebar.group>
 
-            @canany(['orders:view', 'categories:view', 'brands:view', 'products:view'])
+            @canany(['orders:view', 'categories:view', 'brands:view', 'products:view', 'shipping:view'])
             <flux:sidebar.group :heading="__('Administración')" class="grid">
                 @can('orders:view')
                 <flux:sidebar.item icon="clipboard-document-list" :href="route('admin.orders')" :current="request()->routeIs('admin.orders')" wire:navigate>
@@ -44,6 +44,12 @@
                     {{ __('Productos') }}
                 </flux:sidebar.item>
                 @endcan
+
+                @can('shipping:view')
+                <flux:sidebar.item icon="truck" :href="route('admin.shipping')" :current="request()->routeIs('admin.shipping')" wire:navigate>
+                    {{ __('Zonas de Entrega') }}
+                </flux:sidebar.item>
+                @endcan
             </flux:sidebar.group>
             @endcanany
 
@@ -66,7 +72,7 @@
 
         <flux:spacer />
 
-        <flux:sidebar.nav>
+        {{-- <flux:sidebar.nav>
             <flux:sidebar.item icon="folder-git-2" href="https://github.com/laravel/livewire-starter-kit" target="_blank">
                 {{ __('Repository') }}
             </flux:sidebar.item>
@@ -74,7 +80,7 @@
             <flux:sidebar.item icon="book-open-text" href="https://laravel.com/docs/starter-kits#livewire" target="_blank">
                 {{ __('Documentation') }}
             </flux:sidebar.item>
-        </flux:sidebar.nav>
+        </flux:sidebar.nav> --}}
 
         <div class="px-2 pb-2">
             <flux:radio.group x-data variant="segmented" x-model="$flux.appearance">

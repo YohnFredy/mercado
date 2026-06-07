@@ -51,12 +51,22 @@ class CheckoutShipping extends Component
         ];
     }
 
+    /**
+     * Only active departments that have at least one active city.
+     */
     #[Computed]
     public function departments()
     {
-        return Department::where('country_id', $this->country_id)->orderBy('name')->get();
+        return Department::where('country_id', $this->country_id)
+            ->active()
+            ->withActiveCities()
+            ->orderBy('name')
+            ->get();
     }
 
+    /**
+     * Only active cities for the selected department.
+     */
     #[Computed]
     public function cities()
     {
@@ -64,7 +74,10 @@ class CheckoutShipping extends Component
             return collect();
         }
 
-        return City::where('department_id', $this->department_id)->orderBy('name')->get();
+        return City::where('department_id', $this->department_id)
+            ->active()
+            ->orderBy('name')
+            ->get();
     }
 
     #[Computed]
@@ -75,6 +88,19 @@ class CheckoutShipping extends Component
         }
 
         return City::find($this->city_id)?->cost ?? 0;
+    }
+
+    /**
+     * Whether the currently selected city is active and covered.
+     */
+    #[Computed]
+    public function isCityCovered(): bool
+    {
+        if (! $this->city_id) {
+            return false;
+        }
+
+        return City::where('id', $this->city_id)->active()->exists();
     }
 
     public function updatedDepartmentId(): void
@@ -97,11 +123,24 @@ class CheckoutShipping extends Component
             $this->name = $user->name;
             $this->email = $user->email ?? '';
         }
+
+        // Auto-select department if there is only one active department with active cities
+        $departments = $this->departments;
+        if ($departments->count() === 1) {
+            $this->department_id = $departments->first()->id;
+        }
     }
 
     public function placeOrder(CartService $cart): void
     {
         $this->validate();
+
+        // Security: ensure the selected city is still active at order time.
+        if (! $this->isCityCovered()) {
+            $this->addError('city_id', 'Lo sentimos, esta ciudad no tiene cobertura de entrega actualmente.');
+
+            return;
+        }
 
         if ($cart->getCount() === 0) {
             $this->redirectRoute('home', navigate: true);

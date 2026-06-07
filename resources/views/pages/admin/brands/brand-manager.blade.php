@@ -2,6 +2,7 @@
 
 use App\Models\Brand;
 use App\Models\Image;
+use App\Services\ImageOptimizer;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -73,7 +74,8 @@ new #[Layout('layouts.admin')] class extends Component {
         );
 
         if ($this->image) {
-            $path = $this->image->store('images/brands', 'public');
+            $optimizer = app(ImageOptimizer::class);
+            $path = $optimizer->optimize($this->image, 'images/brands');
             
             if ($brand->images()->exists()) {
                 $brand->images()->delete();

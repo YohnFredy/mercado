@@ -59,6 +59,10 @@
         @apply bg-fondo text-gray-900 antialiased;
     }
 
+    [x-cloak] {
+        display: none !important;
+    }
+
     *,
     ::after,
     ::before,

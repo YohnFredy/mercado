@@ -28,7 +28,8 @@ class PermissionSeeder extends Seeder
             'products' => ['view', 'create', 'edit', 'delete'],
             'categories' => ['view', 'create', 'edit', 'delete'],
             'brands' => ['view', 'create', 'edit', 'delete'],
-            'orders' => ['view', 'create', 'edit', 'delete', 'approve'], // Includes special 'approve' permission
+            'orders' => ['view', 'create', 'edit', 'delete', 'approve'],
+            'shipping' => ['view', 'create', 'edit', 'delete'],
             'settings' => ['view', 'create', 'edit', 'delete'],
         ];
 

@@ -28,6 +28,7 @@ new class extends Component {
 ?>
 
 <div x-data="{ open: false, activeCat: null }" @keydown.escape.window="open = false; activeCat = null"
+    @open-mega-menu.window="open = true"
     x-effect="document.body.style.overflow = open ? 'hidden' : ''" class="relative">
 
     <!-- Botón Disparador -->

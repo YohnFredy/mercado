@@ -8,7 +8,20 @@ new class extends Component {
 
     public function mount(): void
     {
-        $this->categories = Category::with('children.children')->whereNull('parent_id')->get()->toArray();
+        $this->categories = Category::query()
+            ->with([
+                'children' => function ($query) {
+                    $query->where('is_active', true)->with([
+                        'children' => function ($q) {
+                            $q->where('is_active', true);
+                        },
+                    ]);
+                },
+            ])
+            ->whereNull('parent_id')
+            ->where('is_active', true)
+            ->get()
+            ->toArray();
     }
 };
 ?>
@@ -118,6 +131,14 @@ new class extends Component {
                     </div>
                 @endforeach
             </nav>
+        </div>
+
+        <!-- Footer del Panel -->
+        <div class="p-4 border-t border-gray-100 bg-gray-50 mt-auto">
+            <a href="{{ route('tienda') }}" @click="open = false" wire:navigate
+                class="w-full flex items-center justify-center gap-2 py-3 px-4 rounded-xl bg-primary text-white font-bold text-sm hover:bg-primary/95 active:scale-95 transition-all duration-200">
+                Ver todas las categorías
+            </a>
         </div>
     </div>
 </div>

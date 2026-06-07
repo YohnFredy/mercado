@@ -28,11 +28,7 @@
             <a href="{{ route('home') }}" class="shrink-0 sm:hidden">
                 <div class="flex flex-col items-center ">
                     <img src="{{ asset('storage/images/logos/logo.png') }}" alt="" class=" h-8 ">
-
-
                     <p class="font-extrabold text-white italic">ipermerca</p>
-
-
                 </div>
             </a>
 
@@ -59,9 +55,9 @@
         <div class="mx-auto w-full max-w-7xl h-13 px-6 lg:px-8 flex items-center z-30">
             <livewire:category.mobile-menu />
             <div class="flex-1 min-w-0">
-                <form action="{{ route('home') }}" method="GET" class="w-full">
+                <form action="{{ route('tienda') }}" method="GET" class="w-full">
                     <flux:input name="search" value="{{ request('search') }}" class="w-full" icon="magnifying-glass"
-                        placeholder="Buscar producto..." />
+                        placeholder="Buscar productos..." />
                 </form>
             </div>
         </div>
@@ -151,8 +147,8 @@
                         </li>
                         <li class="flex items-center gap-3">
                             <flux:icon.device-phone-mobile class="size-5 text-primary shrink-0" />
-                            <a href="https://wa.me/573168906749" target="_blank"
-                                class="text-gray-400 hover:text-white transition-colors text-sm">316 890 6749</a>
+                            <a href="https://wa.me/573206296235" target="_blank"
+                                class="text-gray-400 hover:text-white transition-colors text-sm"> 320 6296235</a>
                         </li>
                     </ul>
                 </div>

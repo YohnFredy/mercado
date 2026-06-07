@@ -114,4 +114,27 @@ class CategoryFilteringTest extends TestCase
             ->set('sort', 'price-low')
             ->assertSeeInOrder(['Z Product', 'A Product']);
     }
+
+    public function test_recommended_sorting_option()
+    {
+        $normalProduct = Product::factory()->create([
+            'title' => 'Producto Normal',
+            'selling_price_excl_vat' => 1000,
+            'vat_percentage' => 0,
+            'discount_percentage' => 0,
+            'is_active' => true,
+        ]);
+
+        $discountedProduct = Product::factory()->create([
+            'title' => 'Producto Con Descuento',
+            'selling_price_excl_vat' => 1500,
+            'vat_percentage' => 0,
+            'discount_percentage' => 20,
+            'is_active' => true,
+        ]);
+
+        Volt::test('pages::product.product-list')
+            ->assertSet('sort', 'recommended')
+            ->assertSeeInOrder(['Producto Con Descuento', 'Producto Normal']);
+    }
 }

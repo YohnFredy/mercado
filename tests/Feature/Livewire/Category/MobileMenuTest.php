@@ -89,4 +89,55 @@ class MobileMenuTest extends TestCase
             ->assertOk()
             ->assertSee('Ver todas las categorías');
     }
+
+    public function test_mobile_menu_does_not_load_inactive_categories(): void
+    {
+        $activeCategory = Category::create([
+            'name' => 'Categoría Activa',
+            'slug' => 'categoria-activa',
+            'is_active' => true,
+        ]);
+
+        $inactiveCategory = Category::create([
+            'name' => 'Categoría Inactiva',
+            'slug' => 'categoria-inactiva',
+            'is_active' => false,
+        ]);
+
+        $activeParent = Category::create([
+            'name' => 'Padre Activo',
+            'slug' => 'padre-activo',
+            'is_active' => true,
+        ]);
+
+        $inactiveChild = Category::create([
+            'parent_id' => $activeParent->id,
+            'name' => 'Hijo Inactivo',
+            'slug' => 'hijo-inactivo',
+            'is_active' => false,
+        ]);
+
+        $activeChild = Category::create([
+            'parent_id' => $activeParent->id,
+            'name' => 'Hijo Activo',
+            'slug' => 'hijo-activo',
+            'is_active' => true,
+        ]);
+
+        $inactiveGrandchild = Category::create([
+            'parent_id' => $activeChild->id,
+            'name' => 'Nieto Inactivo',
+            'slug' => 'nieto-inactivo',
+            'is_active' => false,
+        ]);
+
+        Livewire::test('category.mobile-menu')
+            ->assertOk()
+            ->assertSee('Categoría Activa')
+            ->assertDontSee('Categoría Inactiva')
+            ->assertSee('Padre Activo')
+            ->assertDontSee('Hijo Inactivo')
+            ->assertSee('Hijo Activo')
+            ->assertDontSee('Nieto Inactivo');
+    }
 }

@@ -3,6 +3,8 @@
 use App\Livewire\Checkout\CheckoutConfirmation;
 use App\Livewire\Checkout\CheckoutShipping;
 use App\Livewire\Checkout\CheckoutSummary;
+use App\Models\Order;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 /* Route::view('/', 'welcome')->name('home'); */
@@ -29,9 +31,18 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::redirect('/', '/admin/dashboard');
         Route::livewire('dashboard', 'pages::admin.⚡dashboard')->name('dashboard')->middleware('permission:dashboard:view');
         Route::livewire('orders', 'pages::admin.orders.order-manager')->name('orders')->middleware('permission:orders:view');
+        Route::get('orders/{order}/print', function (Order $order) {
+            $format = request('format', 'letter');
+
+            return view('pages.admin.orders.print', [
+                'order' => $order->load('items'),
+                'format' => $format,
+            ]);
+        })->name('orders.print')->middleware('permission:orders:view');
         Route::livewire('categories', 'pages::admin.categories.category-manager')->name('categories')->middleware('permission:categories:view');
         Route::livewire('brands', 'pages::admin.brands.brand-manager')->name('brands')->middleware('permission:brands:view');
         Route::livewire('products', 'pages::admin.products.product-manager')->name('products')->middleware('permission:products:view');
+        Route::livewire('shipping', 'pages::admin.shipping.shipping-zone-manager')->name('shipping')->middleware('permission:shipping:view');
 
         // Security & User Management
         Route::prefix('security')->name('security.')->group(function () {
@@ -39,6 +50,12 @@ Route::middleware(['auth', 'verified'])->group(function () {
             Route::livewire('users', 'pages::admin.security.user-manager')->name('users')->middleware('permission:users:view');
         });
     });
+
+    Route::get('/link-storage', function () {
+        Artisan::call('storage:link');
+
+        return 'Enlace simbólico creado correctamente.';
+    });
 });
 
-require __DIR__ . '/settings.php';
+require __DIR__.'/settings.php';

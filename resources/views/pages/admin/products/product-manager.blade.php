@@ -4,6 +4,7 @@ use App\Models\Product;
 use App\Models\Category;
 use App\Models\Brand;
 use App\Models\Image;
+use App\Services\ImageOptimizer;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -210,8 +211,10 @@ new #[Layout('layouts.admin')] class extends Component {
         $product->categories()->sync($this->selectedCategories);
 
         if (!empty($this->newImages)) {
+            $optimizer = app(ImageOptimizer::class);
+
             foreach ($this->newImages as $image) {
-                $path = $image->store('images/products', 'public');
+                $path = $optimizer->optimize($image, 'images/products');
                 $product->images()->create([
                     'path' => $path,
                     'filename' => $image->getClientOriginalName(),

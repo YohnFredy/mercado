@@ -9,6 +9,7 @@
 <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 <link rel="shortcut icon" href="/favicon.ico" />
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+<meta name="apple-mobile-web-app-title" content="IperMerca" />
 <link rel="manifest" href="/site.webmanifest" />
 
 <link rel="preconnect" href="https://fonts.bunny.net">
@@ -20,5 +21,5 @@
 
 @vite(['resources/css/app.css', 'resources/js/app.js'])
 @unless($disableDarkMode ?? false)
-    @fluxAppearance
+@fluxAppearance
 @endunless

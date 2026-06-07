@@ -1,4 +1,4 @@
-<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12">
+<div class="max-w-5xl mx-auto sm:px-6 lg:px-8 py-8 sm:py-12">
 
     <!-- Progress Steps -->
     <div class="flex items-center justify-center gap-2 sm:gap-4 mb-8">
@@ -52,7 +52,7 @@
                 <div class="bg-gray-50 rounded-xl p-5 space-y-4">
                     <div class="flex justify-between items-center py-2 border-b border-gray-200">
                         <span class="text-sm font-bold text-gray-500 uppercase tracking-wider">Banco</span>
-                        <span class="text-sm font-black text-gray-900">Bancolombia</span>
+                        <span class="text-sm font-black text-gray-900">Nequi</span>
                     </div>
                     <div class="flex justify-between items-center py-2 border-b border-gray-200">
                         <span class="text-sm font-bold text-gray-500 uppercase tracking-wider">Tipo</span>
@@ -60,16 +60,16 @@
                     </div>
                     <div class="flex justify-between items-center py-2 border-b border-gray-200">
                         <span class="text-sm font-bold text-gray-500 uppercase tracking-wider">Número</span>
-                        <span class="text-sm font-black text-gray-900 tracking-wider">123-456789-00</span>
+                        <span class="text-sm font-black text-gray-900 tracking-wider">317 6198366</span>
                     </div>
-                    <div class="flex justify-between items-center py-2 border-b border-gray-200">
+                    {{-- <div class="flex justify-between items-center py-2 border-b border-gray-200">
                         <span class="text-sm font-bold text-gray-500 uppercase tracking-wider">Titular</span>
                         <span class="text-sm font-black text-gray-900">Mercado Distribuciones S.A.S</span>
                     </div>
                     <div class="flex justify-between items-center py-2 border-b border-gray-200">
                         <span class="text-sm font-bold text-gray-500 uppercase tracking-wider">NIT</span>
                         <span class="text-sm font-black text-gray-900">900.123.456-7</span>
-                    </div>
+                    </div> --}}
                     <div class="flex justify-between items-end py-2">
                         <span class="text-sm font-bold text-gray-500 uppercase tracking-wider">Valor a Pagar</span>
                         <span class="text-xl font-black text-primary tracking-tighter">${{ number_format($order->total, 0, ',', '.') }}</span>
@@ -79,7 +79,7 @@
                 <div class="bg-secondary/5 border border-secondary/20 rounded-xl p-4">
                     <p class="text-sm font-bold text-gray-700 flex items-start gap-2">
                         <flux:icon.information-circle variant="solid" class="size-5 text-secondary shrink-0 mt-0.5" />
-                        <span>Una vez realizado el pago, envía el comprobante de transferencia a nuestro WhatsApp <span class="text-primary font-black">300 123 4567</span> indicando tu número de pedido.</span>
+                        <span>Una vez realizado el pago, envía el comprobante de transferencia a nuestro WhatsApp <span class="text-primary font-black">320 629 6235</span> indicando tu número de pedido.</span>
                     </p>
                 </div>
             </div>

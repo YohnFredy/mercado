@@ -2,6 +2,7 @@
 
 use App\Models\Category;
 use App\Models\Image;
+use App\Services\ImageOptimizer;
 use Livewire\Component;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
@@ -96,7 +97,8 @@ new #[Layout('layouts.admin')] class extends Component {
         );
 
         if ($this->image) {
-            $path = $this->image->store('images/categories', 'public');
+            $optimizer = app(ImageOptimizer::class);
+            $path = $optimizer->optimize($this->image, 'images/categories');
             
             if ($category->images()->exists()) {
                 $category->images()->delete();
